@@ -9,7 +9,7 @@ opencv-python
 scikit-image
 matplotlib
 addict
-dlib
+dlib-bin
 joblib
 scikit-learn
 imageio
