@@ -11,8 +11,7 @@ matplotlib
 addict
 dlib
 joblib
-scipy
-sklearn
+scikit-learn
 imageio
 lpips
 wandb
