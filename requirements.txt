@@ -16,3 +16,4 @@ imageio
 lpips
 wandb
 typing_extensions
+git+https://github.com/openai/CLIP.git
