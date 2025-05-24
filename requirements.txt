@@ -27,4 +27,5 @@ protobuf
 pydantic
 setproctitle
 six
+python-multipart
 git+https://github.com/openai/CLIP.git
