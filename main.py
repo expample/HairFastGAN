@@ -78,3 +78,32 @@ if __name__ == "__main__":
         sys.exit(1)
 
     main(model_args, args)
+from fastapi import FastAPI, File, UploadFile
+from pathlib import Path
+from hair_swap import HairFast, get_parser
+import shutil
+
+app = FastAPI()
+
+@app.post("/swap")
+async def swap_images(face: UploadFile = File(...), shape: UploadFile = File(...), color: UploadFile = File(...)):
+    model_args = get_parser().parse_args([])
+    
+    # שמירת הקבצים הזמניים
+    temp_dir = Path("temp_images")
+    temp_dir.mkdir(exist_ok=True)
+    face_path = temp_dir / face.filename
+    shape_path = temp_dir / shape.filename
+    color_path = temp_dir / color.filename
+
+    for file, path in [(face, face_path), (shape, shape_path), (color, color_path)]:
+        with open(path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+    hair_fast = HairFast(model_args)
+    output_image = hair_fast.swap(face_path, shape_path, color_path)
+    
+    output_path = temp_dir / "result.png"
+    output_image.save(output_path)
+    
+    return {"message": "Success", "output_image": str(output_path)}
