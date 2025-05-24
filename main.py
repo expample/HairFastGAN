@@ -107,3 +107,15 @@ async def swap_images(face: UploadFile = File(...), shape: UploadFile = File(...
     output_image.save(output_path)
     
     return {"message": "Success", "output_image": str(output_path)}
+    import os
+from fastapi import Depends, HTTPException, Header
+
+API_KEY = os.getenv("API_KEY")  # קריאה למפתח מהמשתנים הסביבתיים
+
+def verify_api_key(api_key: str = Header(...)):
+    if api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API Key")  # חסימה במקרה של מפתח שגוי
+
+@app.post("/swap", dependencies=[Depends(verify_api_key)])
+async def swap_images(face: UploadFile = File(...), shape: UploadFile = File(...), color: UploadFile = File(...)):
+    # כאן נמצא הקוד הרגיל של עיבוד התמונה
